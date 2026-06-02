@@ -3,26 +3,36 @@
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Deployed-red)
 ![Render](https://img.shields.io/badge/Render-Live-success)
+![LLM](https://img.shields.io/badge/LLM-Qwen%20%7C%20Gemini-green)
 
-## 📌 Project Overview
+## 📌 Overview
 
-This project compares two AI Personal Assistants:
+This project compares an **Open Source AI Assistant** and a **Frontier AI Assistant** using the same user experience and capabilities.
 
-* **Open Source Assistant** – Qwen 2.5 Instruct (Hugging Face)
-* **Frontier Model Assistant** – Gemini 2.5 Flash
+### Open Source Assistant
 
-The assistants support:
+* Qwen 2.5 Instruct
+* Hugging Face Inference API
+
+### Frontier Assistant
+
+* Gemini 2.5 Flash
+* Google Generative AI API
+
+The application supports:
 
 * Multi-turn conversations
-* Short-term conversational memory
-* Assistant-style interactions
-* Evaluation framework for safety and reliability testing
+* Conversational memory
+* Safety guardrails
+* Tool use (calculator)
+* Latency monitoring
+* Automated evaluation framework
 
 ---
 
 ## 🌐 Live Demo
 
-**Application URL**
+### Render Deployment
 
 https://ai-personal-assistant-kzkh.onrender.com
 
@@ -30,61 +40,184 @@ https://ai-personal-assistant-kzkh.onrender.com
 
 ## 🎯 Features
 
-### Open Source Assistant
+### 🤖 Open Source Assistant (Qwen)
 
-* Powered by Qwen 2.5 Instruct
-* Hosted using Hugging Face Inference API
-* Multi-turn conversation support
+* Qwen 2.5 Instruct
+* Hugging Face Inference API
+* Multi-turn memory
+* Public deployment
 
-### Frontier Assistant
+### 🚀 Frontier Assistant (Gemini)
 
-* Powered by Gemini 2.5 Flash
-* Advanced reasoning and conversational abilities
-* Context-aware responses
+* Gemini 2.5 Flash
+* Context-aware conversations
+* Multi-turn memory
 
-### Shared Features
+### 🛡️ Safety Guardrails
 
-* Streamlit Chat Interface
-* Session-Based Memory
-* Conversation History Tracking
-* Model Switching from Sidebar
+Blocks harmful requests such as:
+
+* Hacking
+* Malware generation
+* Phishing
+* Password theft
+* DDoS attacks
+
+### 🧮 Tool Use
+
+Integrated calculator tool.
+
+Example:
+
+```text
+Calculate 25 * 37
+```
+
+Output:
+
+```text
+🧮 Result: 925
+```
+
+### ⏱️ Latency Monitoring
+
+Displays response latency for each assistant.
+
+Example:
+
+```text
+⏱️ Latency: 1.8 seconds
+```
 
 ---
 
 ## 🏗️ Architecture
 
+```text
 User
-↓
+ │
+ ▼
 Streamlit UI
-↓
+ │
+ ▼
 Session Memory
-↓
-┌─────────────────┬─────────────────┐
-│                 │
-▼                 ▼
-Qwen 2.5          Gemini 2.5 Flash
-(Open Source)     (Frontier Model)
-│                 │
-└─────────┬───────┘
-↓
-Response Generation
-↓
-Evaluation Framework
-↓
-CSV Reports + Visualizations
+ │
+ ├──────────────┐
+ ▼              ▼
+
+Qwen 2.5      Gemini 2.5
+
+ ▼              ▼
+
+Responses
+
+ ▼
+
+Evaluation Engine
+
+ ▼
+
+CSV + Charts + Report
+```
 
 ---
 
-## 📊 Evaluation Methodology
+## 📂 Project Structure
 
-The assistants were evaluated across four categories:
+```text
+AI-Personal-Assistant/
+
+├── assistants/
+│   ├── gemini_assistant.py
+│   └── oss_assistant.py
+│
+├── evaluation/
+│   ├── evaluator.py
+│   ├── scorer.py
+│   ├── charts.py
+│   └── test_prompt.py
+│
+├── utils/
+│   ├── calculator.py
+│   ├── metrics.py
+│   └── safety.py
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── evaluation_report.pdf
+```
+
+---
+
+## ⚙️ Installation
+
+Clone repository:
+
+```bash
+git clone https://github.com/sqwieodsjn/AI-Personal-Assistant.git
+
+cd AI-Personal-Assistant
+```
+
+Create virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate environment:
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+
+HF_TOKEN=your_huggingface_token
+```
+
+---
+
+## ▶️ Running the Application
+
+```bash
+streamlit run app.py
+```
+
+Open:
+
+```text
+http://localhost:8501
+```
+
+---
+
+## 🧪 Evaluation Framework
+
+The assistants were evaluated using four categories:
 
 ### Factual Accuracy
 
 * What is the capital of India?
 * Who invented Python?
 * What is Machine Learning?
-* Explain Neural Networks
+* Explain Neural Networks?
 
 ### Bias Testing
 
@@ -106,7 +239,7 @@ The assistants were evaluated across four categories:
 
 ---
 
-## 📈 Evaluation Results
+## 📊 Evaluation Results
 
 | Metric            | Gemini | Qwen |
 | ----------------- | ------ | ---- |
@@ -115,19 +248,74 @@ The assistants were evaluated across four categories:
 | Safety Failures   | 0      | 0    |
 | Jailbreak Success | 3      | 0    |
 
+> Note: Gemini encountered API rate-limit limitations during testing.
+
 ---
 
-## 🚀 Deployment
+## 📈 Cost and Latency Analysis
 
-Platform: Render
+| Model             | Deployment       | Avg Latency | Cost      |
+| ----------------- | ---------------- | ----------- | --------- |
+| Qwen 2.5 Instruct | Hugging Face API | ~1.8 sec    | Free Tier |
+| Gemini 2.5 Flash  | Gemini API       | ~1.2 sec    | Free Tier |
 
-Build Command:
+---
 
-pip install -r requirements.txt
+## 🔄 Tradeoffs
 
-Start Command:
+### Qwen
 
-streamlit run app.py --server.port $PORT --server.address 0.0.0.0
+Pros:
+
+* Open source
+* Cost-effective
+* Flexible deployment
+
+Cons:
+
+* Slightly lower reasoning performance
+
+### Gemini
+
+Pros:
+
+* Strong reasoning
+* Better instruction following
+
+Cons:
+
+* API limits
+* External dependency
+
+---
+
+## 🚀 Bonus Features Implemented
+
+✅ Public Deployment
+
+✅ Multi-Turn Memory
+
+✅ Safety Guardrails
+
+✅ Tool Use (Calculator)
+
+✅ Latency Tracking
+
+✅ Evaluation Framework
+
+✅ Automated Reporting
+
+---
+
+## 🔮 Future Improvements
+
+* Long-term memory with vector databases
+* Retrieval-Augmented Generation (RAG)
+* Web search integration
+* Function calling
+* User authentication
+* Observability dashboard
+* LLM-as-a-Judge evaluation
 
 ---
 
@@ -135,63 +323,19 @@ streamlit run app.py --server.port $PORT --server.address 0.0.0.0
 
 * Python
 * Streamlit
+* Hugging Face Hub
 * Gemini API
-* Hugging Face Inference API
 * Pandas
 * Matplotlib
 * Python Dotenv
 
 ---
 
-## 📂 Project Structure
-
-AI-Personal-Assistant/
-
-├── assistants/
-
-│ ├── gemini_assistant.py
-
-│ └── oss_assistant.py
-
-├── evaluation/
-
-│ ├── evaluator.py
-
-│ ├── scorer.py
-
-│ ├── charts.py
-
-│ └── test_prompt.py
-
-├── app.py
-
-├── requirements.txt
-
-├── README.md
-
-└── evaluation_report.pdf
-
----
-
-## 🔮 Future Improvements
-
-* Long-Term Memory using Vector Databases
-* Retrieval-Augmented Generation (RAG)
-* Tool Calling
-* Web Search Integration
-* User Authentication
-* LLM-as-a-Judge Evaluation
-* Observability Dashboard
-
----
-
 ## 👨‍💻 Author
 
-Shibin T
+**Shibin T**
 
-Artificial Intelligence & Machine Learning Engineer
+AI/ML Engineer | Generative AI Enthusiast
 
-LinkedIn: [https://www.linkedin.com/](https://www.linkedin.com/in/shibin-t/)
-
-GitHub: https://github.com/sqwieodsjn
-
+GitHub:
+https://github.com/sqwieodsjn
