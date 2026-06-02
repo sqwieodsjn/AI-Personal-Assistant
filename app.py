@@ -1,3 +1,5 @@
+import re
+
 import streamlit as st
 
 from assistants.gemini_assistant import (
@@ -6,6 +8,18 @@ from assistants.gemini_assistant import (
 
 from assistants.oss_assistant import (
     get_oss_response
+)
+
+from utils.safety import (
+    safety_check
+)
+
+from utils.calculator import (
+    calculator
+)
+
+from utils.metrics import (
+    measure_latency
 )
 
 st.set_page_config(
@@ -87,7 +101,7 @@ prompt = st.chat_input(
 
 if prompt:
 
-    # Save User Message
+    # Store User Message
 
     st.session_state.messages.append(
         {
@@ -96,13 +110,13 @@ if prompt:
         }
     )
 
-    # Show User Message
+    # Display User Message
 
     with st.chat_message("user"):
 
         st.markdown(prompt)
 
-    # Generate Response
+    # Assistant Response
 
     with st.chat_message("assistant"):
 
@@ -112,32 +126,105 @@ if prompt:
             "Thinking..."
         ):
 
-            if assistant_type == \
-               "Open Source Assistant":
+            # -------------------
+            # SAFETY GUARDRAILS
+            # -------------------
+
+            blocked_response = (
+                safety_check(
+                    prompt
+                )
+            )
+
+            if blocked_response:
 
                 ai_response = (
-                    get_oss_response(
-                        st.session_state.messages
-                    )
+                    blocked_response
                 )
 
             else:
 
-                ai_response = (
-                    get_gemini_response(
-                        st.session_state.messages
-                    )
+                # -------------------
+                # CALCULATOR TOOL
+                # -------------------
+
+                calc_match = re.search(
+                    r"calculate (.+)",
+                    prompt.lower()
                 )
+
+                if calc_match:
+
+                    expression = (
+                        calc_match.group(1)
+                    )
+
+                    result = (
+                        calculator(
+                            expression
+                        )
+                    )
+
+                    ai_response = (
+                        f"🧮 Result: {result}"
+                    )
+
+                else:
+
+                    # -------------------
+                    # MODEL SELECTION
+                    # -------------------
+
+                    if assistant_type == \
+                       "Open Source Assistant":
+
+                        ai_response, latency = (
+
+                            measure_latency(
+
+                                get_oss_response,
+
+                                st.session_state.messages
+
+                            )
+
+                        )
+
+                    else:
+
+                        ai_response, latency = (
+
+                            measure_latency(
+
+                                get_gemini_response,
+
+                                st.session_state.messages
+
+                            )
+
+                        )
+
+                    ai_response += (
+
+                        f"\n\n⏱️ Latency: "
+                        f"{latency} seconds"
+
+                    )
 
         placeholder.markdown(
             ai_response
         )
 
-    # Save Assistant Response
+    # Store Assistant Response
 
     st.session_state.messages.append(
+
         {
+
             "role": "assistant",
+
             "content": ai_response
+
         }
+
     )
